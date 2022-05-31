@@ -19,17 +19,24 @@ namespace Json
 
         public string Format(IJsonValue json) => this.Format(json, 0);
 
-        protected string GetPrefix(int level) => this.Style switch
+        protected string GetLinePrefix(int level) => this.Style switch
         {
             JsonFormatStyle.Prettify => new string(' ', level * 2),
             JsonFormatStyle.Independent => " ",
             _ => string.Empty,
         };
 
+        protected string GetWhiteSpaceAfterNameDelimiter() => this.Style switch
+        {
+            JsonFormatStyle.Prettify => " ",
+            JsonFormatStyle.Independent => " ",
+            _ => string.Empty,
+        };
+
         protected string Format(IJsonValue json, int level)
         {
-            var prefix = this.GetPrefix(level);
-            var prefix2 = this.GetPrefix(level + 1);
+            var prefix = this.GetLinePrefix(level);
+            var prefix2 = this.GetLinePrefix(level + 1);
 
             if (json is null)
             {
@@ -46,10 +53,12 @@ namespace Json
                     builder.AppendLine();
                 }
 
+                var nameDelimiterWithWhiteSpace = $"{JsonReader.NameDelimiter}{this.GetWhiteSpaceAfterNameDelimiter()}";
+
                 for (var i = 0; i < pairs.Length; i++)
                 {
                     var pair = pairs[i];
-                    builder.Append(prefix2).Append($"{JsonReader.StringDelimiter}{pair.Key}{JsonReader.StringDelimiter}: {this.Format(pair.Value, level + 1)}");
+                    builder.Append(prefix2).Append($"{JsonReader.StringDelimiter}{pair.Key}{JsonReader.StringDelimiter}{nameDelimiterWithWhiteSpace}{this.Format(pair.Value, level + 1)}");
                     this.AppendValueSeparator(builder, i, pairs.Length);
                 }
 

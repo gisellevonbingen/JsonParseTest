@@ -6,31 +6,31 @@ namespace Json
     {
         public static void TestParsing()
         {
-            Test(JsonObject.Parse, "{}");
-            Test(JsonObject.Parse, "{\"A\": null}");
-            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1}");
-            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\"}");
-            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}}");
-            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": []}");
-            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": [], \"H\": [1 ,2,3]}");
+            ParseAndPrint(JsonObject.Parse, "{}");
+            ParseAndPrint(JsonObject.Parse, "{\"A\": null}");
+            ParseAndPrint(JsonObject.Parse, "{\"A\": null, \"B\": 1}");
+            ParseAndPrint(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\"}");
+            ParseAndPrint(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}}");
+            ParseAndPrint(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": []}");
+            ParseAndPrint(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": [], \"H\": [1 ,2,3]}");
 
-            Test(JsonArray.Parse, "[]");
-            Test(JsonArray.Parse, "[[]]");
-            Test(JsonArray.Parse, "[[], []]");
-            Test(JsonArray.Parse, "[[], {}]");
-            Test(JsonArray.Parse, "[ {}, {\"A\": [ null]}]");
+            ParseAndPrint(JsonArray.Parse, "[]");
+            ParseAndPrint(JsonArray.Parse, "[[]]");
+            ParseAndPrint(JsonArray.Parse, "[[], []]");
+            ParseAndPrint(JsonArray.Parse, "[[], {}]");
+            ParseAndPrint(JsonArray.Parse, "[ {}, {\"A\": [ null]}]");
 
-            Test(JsonPrimitive.Parse, "\"A\\\"S\tD\"");
+            ParseAndPrint(JsonPrimitive.Parse, "\"A\\\"S\tD\"");
 
-            Test(JsonPrimitive.Parse, "\"\\u0061\"");
-            Test(JsonPrimitive.Parse, "true");
-            Test(JsonPrimitive.Parse, "false");
-            Test(JsonPrimitive.Parse, "null");
-            Test(JsonPrimitive.Parse, "3.14");
-            Test(JsonPrimitive.Parse, "-3.14");
+            ParseAndPrint(JsonPrimitive.Parse, "\"\\u0061\"");
+            ParseAndPrint(JsonPrimitive.Parse, "true");
+            ParseAndPrint(JsonPrimitive.Parse, "false");
+            ParseAndPrint(JsonPrimitive.Parse, "null");
+            ParseAndPrint(JsonPrimitive.Parse, "3.14");
+            ParseAndPrint(JsonPrimitive.Parse, "-3.14");
         }
 
-        public static void Test(Func<string, IJsonValue> parser, string input)
+        public static void ParseAndPrint(Func<string, IJsonValue> parser, string input)
         {
             var json = parser(input);
             var prettify = json.ToString(JsonFormatStyle.Prettify);
@@ -55,7 +55,7 @@ namespace Json
 
         public static void TestPrettify()
         {
-            Test(JsonObject.Parse, @"{   ""datetime"": ""2022-06-01T13:40:00"", ""code"":
+            ParseAndPrint(JsonObject.Parse, @"{   ""datetime"": ""2022-06-01T13:40:00"", ""code"":
 {""python"":               ""print(\""good\"")""
 ,""rust""
 :
@@ -64,7 +64,7 @@ namespace Json
 , ""data"": [false, 1, ""    2"",
 3, 4]}");
 
-            Test(JsonObject.Parse, @"{""NickName"":
+            ParseAndPrint(JsonObject.Parse, @"{""NickName"":
 "",\""d:e//lu,\"""",   ""tooSad""
 :
 [null, 3.2253, "":raaLf;:sadF]\""soaf]]]:\""%rate""]
