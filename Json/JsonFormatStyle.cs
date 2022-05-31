@@ -9,7 +9,8 @@ namespace Json
     public enum JsonFormatStyle : byte
     {
         Prettify = 0,
-        Minify = 1,
+        Independent = 1,
+        Minify = 2,
     }
 
 }

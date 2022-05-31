@@ -19,10 +19,17 @@ namespace Json
 
         public string Format(IJsonValue json) => this.Format(json, 0);
 
+        protected string GetPrefix(int level) => this.Style switch
+        {
+            JsonFormatStyle.Prettify => new string(' ', level * 2),
+            JsonFormatStyle.Independent => " ",
+            _ => string.Empty,
+        };
+
         protected string Format(IJsonValue json, int level)
         {
-            var prefix = this.Style == JsonFormatStyle.Prettify ? new string(' ', level * 2) : " ";
-            var prefix2 = this.Style == JsonFormatStyle.Prettify ? new string(' ', (level + 1) * 2) : " ";
+            var prefix = this.GetPrefix(level);
+            var prefix2 = this.GetPrefix(level + 1);
 
             if (json is null)
             {
@@ -34,27 +41,19 @@ namespace Json
                 var builder = new StringBuilder();
                 builder.Append($"{JsonReader.ObjectPrefix}");
 
-                if (pairs.Length == 0)
+                if (this.Style == JsonFormatStyle.Prettify)
                 {
-                    builder.Append(' ').Append(JsonReader.ObjectSuffix);
-                }
-                else
-                {
-                    if (this.Style == JsonFormatStyle.Prettify)
-                    {
-                        builder.AppendLine();
-                    }
-
-                    for (var i = 0; i < pairs.Length; i++)
-                    {
-                        var pair = pairs[i];
-                        builder.Append(prefix2).Append($"{JsonReader.StringDelimiter}{pair.Key}{JsonReader.StringDelimiter}: {this.Format(pair.Value, level + 1)}");
-                        this.AppendValueSeparator(builder, i, pairs.Length);
-                    }
-
-                    builder.Append($"{prefix}{JsonReader.ObjectSuffix}");
+                    builder.AppendLine();
                 }
 
+                for (var i = 0; i < pairs.Length; i++)
+                {
+                    var pair = pairs[i];
+                    builder.Append(prefix2).Append($"{JsonReader.StringDelimiter}{pair.Key}{JsonReader.StringDelimiter}: {this.Format(pair.Value, level + 1)}");
+                    this.AppendValueSeparator(builder, i, pairs.Length);
+                }
+
+                builder.Append($"{prefix}{JsonReader.ObjectSuffix}");
                 return builder.ToString();
             }
             else if (json is JsonArray array)
@@ -63,27 +62,19 @@ namespace Json
                 var builder = new StringBuilder();
                 builder.Append(JsonReader.ArrayPrefix);
 
-                if (values.Length == 0)
+                if (this.Style == JsonFormatStyle.Prettify)
                 {
-                    builder.Append(' ').Append(JsonReader.ArraySuffix);
-                }
-                else
-                {
-                    if (this.Style == JsonFormatStyle.Prettify)
-                    {
-                        builder.AppendLine();
-                    }
-
-                    for (var i = 0; i < values.Length; i++)
-                    {
-                        var value = values[i];
-                        builder.Append(prefix2).Append(this.Format(value, level + 1));
-                        this.AppendValueSeparator(builder, i, values.Length);
-                    }
-
-                    builder.Append($"{prefix}{JsonReader.ArraySuffix}");
+                    builder.AppendLine();
                 }
 
+                for (var i = 0; i < values.Length; i++)
+                {
+                    var value = values[i];
+                    builder.Append(prefix2).Append(this.Format(value, level + 1));
+                    this.AppendValueSeparator(builder, i, values.Length);
+                }
+
+                builder.Append($"{prefix}{JsonReader.ArraySuffix}");
                 return builder.ToString();
 
             }

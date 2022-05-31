@@ -34,12 +34,15 @@ namespace Json
         {
             var json = parser(input);
             var prettify = json.ToString(JsonFormatStyle.Prettify);
+            var independent = json.ToString(JsonFormatStyle.Independent);
             var minify = json.ToString(JsonFormatStyle.Minify);
             Console.WriteLine("====================");
             Console.WriteLine(prettify);
+            Console.WriteLine(independent);
             Console.WriteLine(minify);
 
             parser(prettify);
+            parser(independent);
             parser(minify);
         }
 
