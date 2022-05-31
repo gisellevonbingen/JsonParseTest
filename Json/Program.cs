@@ -33,16 +33,19 @@ namespace Json
         public static void Test(Func<string, IJsonValue> parser, string input)
         {
             var json = parser(input);
-            Console.WriteLine(json);
+            var prettify = json.ToString(JsonFormatStyle.Prettify);
+            var minify = json.ToString(JsonFormatStyle.Minify);
+            Console.WriteLine("====================");
+            Console.WriteLine(prettify);
+            Console.WriteLine(minify);
 
-            parser(json.ToString(JsonFormatStyle.Prettify));
-            parser(json.ToString(JsonFormatStyle.Minify));
+            parser(prettify);
+            parser(minify);
         }
 
         public static void Main(string[] args)
         {
             ParseTest();
-            Console.WriteLine("====================");
 
             var str = @"{   ""datetime"": ""2022-06-01T13:40:00"", ""code"":
 {""python"":               ""print(\""good\"")""
@@ -52,9 +55,7 @@ namespace Json
 ""print!(\""goodn\"");""}
 , ""data"": [false, 1, ""    2"",
 3, 4]}";
-
-            Console.WriteLine(JsonObject.Parse(str).ToString(JsonFormatStyle.Prettify));
-            Console.WriteLine(JsonObject.Parse(str).ToString(JsonFormatStyle.Minify));
+            Test(JsonObject.Parse, str);
 
         }
 

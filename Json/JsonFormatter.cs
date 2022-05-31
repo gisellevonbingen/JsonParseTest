@@ -21,7 +21,7 @@ namespace Json
 
         protected string Format(IJsonValue json, int level)
         {
-            var prefix = new string(' ', level * 2);
+            var prefix = this.Style == JsonFormatStyle.Prettify ? new string(' ', level * 2) : " ";
             var prefix2 = this.Style == JsonFormatStyle.Prettify ? new string(' ', (level + 1) * 2) : " ";
 
             if (json is null)
@@ -52,15 +52,7 @@ namespace Json
                         this.AppendValueSeparator(builder, i, pairs.Length);
                     }
 
-                    if (this.Style == JsonFormatStyle.Prettify)
-                    {
-                        builder.Append($"{prefix}{JsonReader.ObjectSuffix}");
-                    }
-                    else
-                    {
-                        builder.Append(JsonReader.ObjectSuffix);
-                    }
-
+                    builder.Append($"{prefix}{JsonReader.ObjectSuffix}");
                 }
 
                 return builder.ToString();
@@ -89,15 +81,7 @@ namespace Json
                         this.AppendValueSeparator(builder, i, values.Length);
                     }
 
-                    if (this.Style == JsonFormatStyle.Prettify)
-                    {
-                        builder.Append($"{prefix}{JsonReader.ArraySuffix}");
-                    }
-                    else
-                    {
-                        builder.Append(JsonReader.ArraySuffix);
-                    }
-
+                    builder.Append($"{prefix}{JsonReader.ArraySuffix}");
                 }
 
                 return builder.ToString();
