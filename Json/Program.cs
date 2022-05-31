@@ -7,24 +7,38 @@ namespace Json
         public static void ParseTest()
         {
             Console.WriteLine(JsonObject.Parse("{}"));
-            Console.WriteLine(JsonObject.Parse("{\"A\": null}"));
-            Console.WriteLine(JsonObject.Parse("{\"A\": null, \"B\": 1}"));
-            Console.WriteLine(JsonObject.Parse("{\"A\": null, \"B\": 1, \"C\": \"123\"}"));
-            Console.WriteLine(JsonObject.Parse("{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}}"));
-            Console.WriteLine(JsonObject.Parse("{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": []}"));
-            Console.WriteLine(JsonObject.Parse("{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": [], \"H\": [1 ,2,3]}"));
+            Test(JsonObject.Parse, "{}");
+            Test(JsonObject.Parse, "{\"A\": null}");
+            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1}");
+            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\"}");
+            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}}");
+            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": []}");
+            Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": [], \"H\": [1 ,2,3]}");
 
 
-            Console.WriteLine(JsonArray.Parse("[ {}, {\"A\": [ null]}]"));
+            Test(JsonArray.Parse, "[]");
+            Test(JsonArray.Parse, "[[]]");
+            Test(JsonArray.Parse, "[[], []]");
+            Test(JsonArray.Parse, "[[], {}]");
+            Test(JsonArray.Parse, "[ {}, {\"A\": [ null]}]");
 
-            Console.WriteLine(JsonPrimitive.Parse("\"A\\\"S\tD\""));
+            Test(JsonPrimitive.Parse, "\"A\\\"S\tD\"");
 
-            Console.WriteLine(JsonPrimitive.Parse("\"\\u0061\""));
-            Console.WriteLine(JsonPrimitive.Parse("true"));
-            Console.WriteLine(JsonPrimitive.Parse("false"));
-            Console.WriteLine(JsonPrimitive.Parse("null"));
-            Console.WriteLine(JsonPrimitive.Parse("3.14"));
-            Console.WriteLine(JsonPrimitive.Parse("-3.14"));
+            Test(JsonPrimitive.Parse, "\"\\u0061\"");
+            Test(JsonPrimitive.Parse, "true");
+            Test(JsonPrimitive.Parse, "false");
+            Test(JsonPrimitive.Parse, "null");
+            Test(JsonPrimitive.Parse, "3.14");
+            Test(JsonPrimitive.Parse, "-3.14");
+        }
+
+        public static void Test(Func<string, IJsonValue> parser, string input)
+        {
+            var json = parser(input);
+            Console.WriteLine(json);
+
+            parser(json.ToString(JsonFormatStyle.Prettify));
+            parser(json.ToString(JsonFormatStyle.Minify));
         }
 
         public static void Main(string[] args)
