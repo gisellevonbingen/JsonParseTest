@@ -4,7 +4,7 @@ namespace Json
 {
     public class Program
     {
-        public static void ParseTest()
+        public static void TestParsing()
         {
             Test(JsonObject.Parse, "{}");
             Test(JsonObject.Parse, "{\"A\": null}");
@@ -48,18 +48,28 @@ namespace Json
 
         public static void Main(string[] args)
         {
-            ParseTest();
+            TestParsing();
 
-            var str = @"{   ""datetime"": ""2022-06-01T13:40:00"", ""code"":
+            TestPrettify();
+        }
+
+        public static void TestPrettify()
+        {
+            Test(JsonObject.Parse, @"{   ""datetime"": ""2022-06-01T13:40:00"", ""code"":
 {""python"":               ""print(\""good\"")""
 ,""rust""
 :
 
 ""print!(\""goodn\"");""}
 , ""data"": [false, 1, ""    2"",
-3, 4]}";
-            Test(JsonObject.Parse, str);
+3, 4]}");
 
+            Test(JsonObject.Parse, @"{""NickName"":
+"",\""d:e//lu,\"""",   ""tooSad""
+:
+[null, 3.2253, "":raaLf;:sadF]\""soaf]]]:\""%rate""]
+  
+  , ""RainWar""        : ""}feel][So:,g\""OOd,[\""{"" }");
         }
 
     }
