@@ -14,7 +14,9 @@ namespace Json
         public const char ObjectSuffix = '}';
         public const char ArrayPrefix = '[';
         public const char ArraySuffix = ']';
+        public const char StringEscpace = '\\';
         public const char StringDelimiter = '\"';
+        public const string StringDelimiterString = "\"";
         public const char NameDelimiter = ':';
         public const char ValueSeparator = ',';
 
@@ -380,7 +382,7 @@ namespace Json
                         }
 
                     }
-                    else if (c == StringDelimiter || c == '\\')
+                    else if (c == StringDelimiter || c == StringEscpace)
                     {
                         builder.Append(c);
                         escaping = false;
@@ -420,7 +422,7 @@ namespace Json
                     }
 
                 }
-                else if (c == '\\')
+                else if (c == StringEscpace)
                 {
                     escaping = true;
                 }

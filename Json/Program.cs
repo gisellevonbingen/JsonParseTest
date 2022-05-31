@@ -6,7 +6,6 @@ namespace Json
     {
         public static void ParseTest()
         {
-            Console.WriteLine(JsonObject.Parse("{}"));
             Test(JsonObject.Parse, "{}");
             Test(JsonObject.Parse, "{\"A\": null}");
             Test(JsonObject.Parse, "{\"A\": null, \"B\": 1}");
@@ -14,7 +13,6 @@ namespace Json
             Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}}");
             Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": []}");
             Test(JsonObject.Parse, "{\"A\": null, \"B\": 1, \"C\": \"123\", \"D\": {}, \"E\": { \"F\": true}, \"G\": [], \"H\": [1 ,2,3]}");
-
 
             Test(JsonArray.Parse, "[]");
             Test(JsonArray.Parse, "[[]]");

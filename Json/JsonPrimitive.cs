@@ -9,6 +9,8 @@ namespace Json
 {
     public class JsonPrimitive : IJsonValue
     {
+        public static string EscapedStringDelimiter { get; } = $"{JsonReader.StringEscpace}{JsonReader.StringDelimiter}";
+
         public static JsonPrimitive Parse(string input)
         {
             using var reader = new JsonReader(input);
@@ -25,6 +27,12 @@ namespace Json
 
         }
 
+        public static string EscapeString(string text)
+        {
+            var escape = text.Replace(JsonReader.StringDelimiterString, EscapedStringDelimiter);
+            return $"{JsonReader.StringDelimiterString}{escape}{JsonReader.StringDelimiterString}";
+        }
+
         public object Value { get; set; }
 
         public string ToString(JsonFormatStyle style) => this.ToString();
@@ -35,7 +43,7 @@ namespace Json
 
             if (value is null) return JsonReader.Null;
             else if (value is bool b) return b ? JsonReader.True : JsonReader.False;
-            else if (value is string str) return $"\"{str.Replace("\"", "\\\"")}\"";
+            else if (value is string str) return EscapeString(str);
             else return string.Concat(value);
         }
 
