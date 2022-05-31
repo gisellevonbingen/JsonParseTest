@@ -140,7 +140,7 @@ namespace Json
                 }
                 else if (IsControl(c) == true)
                 {
-                    throw new JsonSyntaxException($"Unexpected char 's{c}'");
+                    throw new JsonSyntaxException($"Unexpected char '{c}'");
                 }
                 else
                 {

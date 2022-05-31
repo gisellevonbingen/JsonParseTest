@@ -35,7 +35,7 @@ namespace Json
 
             if (value is null) return JsonReader.Null;
             else if (value is bool b) return b ? JsonReader.True : JsonReader.False;
-            else if (value is string str) return $"\"{str}\"";
+            else if (value is string str) return $"\"{str.Replace("\"", "\\\"")}\"";
             else return string.Concat(value);
         }
 
