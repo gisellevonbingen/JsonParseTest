@@ -48,21 +48,29 @@ namespace Json
                 var builder = new StringBuilder();
                 builder.Append($"{JsonReader.ObjectPrefix}");
 
-                if (this.Style == JsonFormatStyle.Prettify)
+                if (pairs.Length == 0)
                 {
-                    builder.AppendLine();
+                    builder.Append(' ').Append(JsonReader.ObjectSuffix);
+                }
+                else
+                {
+                    if (this.Style == JsonFormatStyle.Prettify)
+                    {
+                        builder.AppendLine();
+                    }
+
+                    var nameDelimiterWithWhiteSpace = $"{JsonReader.NameDelimiter}{this.GetWhiteSpaceAfterNameDelimiter()}";
+
+                    for (var i = 0; i < pairs.Length; i++)
+                    {
+                        var pair = pairs[i];
+                        builder.Append(prefix2).Append($"{JsonReader.StringDelimiter}{pair.Key}{JsonReader.StringDelimiter}{nameDelimiterWithWhiteSpace}{this.Format(pair.Value, level + 1)}");
+                        this.AppendValueSeparator(builder, i, pairs.Length);
+                    }
+
+                    builder.Append($"{prefix}{JsonReader.ObjectSuffix}");
                 }
 
-                var nameDelimiterWithWhiteSpace = $"{JsonReader.NameDelimiter}{this.GetWhiteSpaceAfterNameDelimiter()}";
-
-                for (var i = 0; i < pairs.Length; i++)
-                {
-                    var pair = pairs[i];
-                    builder.Append(prefix2).Append($"{JsonReader.StringDelimiter}{pair.Key}{JsonReader.StringDelimiter}{nameDelimiterWithWhiteSpace}{this.Format(pair.Value, level + 1)}");
-                    this.AppendValueSeparator(builder, i, pairs.Length);
-                }
-
-                builder.Append($"{prefix}{JsonReader.ObjectSuffix}");
                 return builder.ToString();
             }
             else if (json is JsonArray array)
@@ -70,20 +78,27 @@ namespace Json
                 var values = array.ToArray();
                 var builder = new StringBuilder();
                 builder.Append(JsonReader.ArrayPrefix);
-
-                if (this.Style == JsonFormatStyle.Prettify)
+                if (values.Length == 0)
                 {
-                    builder.AppendLine();
+                    builder.Append(' ').Append(JsonReader.ArraySuffix);
+                }
+                else
+                {
+                    if (this.Style == JsonFormatStyle.Prettify)
+                    {
+                        builder.AppendLine();
+                    }
+
+                    for (var i = 0; i < values.Length; i++)
+                    {
+                        var value = values[i];
+                        builder.Append(prefix2).Append(this.Format(value, level + 1));
+                        this.AppendValueSeparator(builder, i, values.Length);
+                    }
+
+                    builder.Append($"{prefix}{JsonReader.ArraySuffix}");
                 }
 
-                for (var i = 0; i < values.Length; i++)
-                {
-                    var value = values[i];
-                    builder.Append(prefix2).Append(this.Format(value, level + 1));
-                    this.AppendValueSeparator(builder, i, values.Length);
-                }
-
-                builder.Append($"{prefix}{JsonReader.ArraySuffix}");
                 return builder.ToString();
 
             }
